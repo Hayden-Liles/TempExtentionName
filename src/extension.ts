@@ -222,23 +222,73 @@ export class EditorListener {
     private _subscriptions: vscode.Disposable[] = [];
     private _basePath: string = path.join(__dirname, '..');
 
-    private _retroAudio: string = path.join(this._basePath, 'audio', 'retro.wav');
+
+    //                                       AUDIO FILES
+
+    //                                       Key Presses
+    // Space_Bar Key
+    private _mario_jump_Audio: string = path.join(this._basePath, 'audio', 'mario_jump.mp3'); 
+
+    // Enter Key
+    private _mario_coin_Audio: string = path.join(this._basePath, 'audio', 'mario_coin.mp3'); 
+
+
+
+    //                                    File Manipulation
+    // Create New File
+    private _1_up_Audio: string = path.join(this._basePath, 'audio', '1_up.mp3');
+
+    // Switch Between Files
+    private _mario_pipe_Audio: string = path.join(this._basePath, 'audio', 'mario_pipe.mp3'); 
+
+    // Delete File
+    private _death_Audio: string = path.join(this._basePath, 'audio', 'death.mp3'); 
+
+    // Save File
+    private _level_complete_Audio: string = path.join(this._basePath, 'audio', 'level_complete.mp3'); 
+
+    // Open Project
+    private _here_we_go_Audio: string = path.join(this._basePath, 'audio', 'here_we_go.mp3'); 
+
+    // Split Screen
+    private _star_power_Audio: string = path.join(this._basePath, 'audio', 'star_power.mp3');
+
+    // Zen mode
+    private _mario_bros_Audio: string = path.join(this._basePath, 'audio', 'mario_bros.mp3'); 
+
+    // TEST SOUND 
+    private _retroAudio: string = path.join(this._basePath, 'audio', 'retro.wav'); 
+
+
+    // NOTE Maybe Section
+    // MARIO KART START RACE - run server
+    // MARIO KART LONG JUMP - run client
+    // MARIO - POWER UP - creation of cunstructor
+    // MARIO BROS GAME OVER - build error
+    // MARIO WINS - build success
 
     constructor(private player: any) {
         isNotArrowKey = false;
-
-        vscode.workspace.onDidSaveTextDocument(this._saveCallback, this, this._subscriptions);
         this._disposable = vscode.Disposable.from(...this._subscriptions);
         this.player = {
             play: (filePath: string) => player.play(filePath, config)
         };
-    }
+        // EXAMPLE of EVENT LISTENER
+            // vscode.workspace.onDidSaveTextDocument(this._EXAMPLECALLBACK, this, this._subscriptions);
+        // EVENT LISTENERS VVV
 
-    _saveCallback = debounce(() => {
-        this.player.play(this._retroAudio)
-    }, 100, { leading: true });
+
+        
+    }
+    // CALL_BACKS VVVV
 
     dispose() {
         this._disposable.dispose();
     }
 }
+
+
+// NOTE Callback Example
+// _saveCallback = debounce(() => {
+//     this.player.play(this._level_complete_Audio)
+// }, 100, { leading: true });
