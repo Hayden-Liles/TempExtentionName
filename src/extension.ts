@@ -5,16 +5,16 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import player, { PlayerConfig } from './player';
 import debounce = require('lodash.debounce');
-import { toInteger } from 'lodash';
+import { keys, toInteger } from 'lodash';
 
 let listener: EditorListener;
 let isActive: boolean;
-let isNotArrowKey: boolean;
 let config: PlayerConfig = {
     macVol: 1,
     winVol: 100,
     linuxVol: 100
 };
+let lineCount = vscode.window.activeTextEditor?.document.lineCount;
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -225,39 +225,39 @@ export class EditorListener {
 
     //                                       AUDIO FILES
 
-    //                                       Key Presses
+    //                                       Key Presses ✔
     // Space_Bar Key
-    private _mario_jump_Audio: string = path.join(this._basePath, 'audio', 'mario_jump.mp3'); 
+    private _mario_jump_Audio: string = path.join(this._basePath, 'audio', 'mario_jump.wav');
 
     // Enter Key
-    private _mario_coin_Audio: string = path.join(this._basePath, 'audio', 'mario_coin.mp3'); 
+    private _mario_coin_Audio: string = path.join(this._basePath, 'audio', 'mario_coin.wav');
 
 
 
     //                                    File Manipulation
     // Create New File
-    private _1_up_Audio: string = path.join(this._basePath, 'audio', '1_up.mp3');
+    private _1_up_Audio: string = path.join(this._basePath, 'audio', '1_up.wav');
 
     // Switch Between Files
-    private _mario_pipe_Audio: string = path.join(this._basePath, 'audio', 'mario_pipe.mp3'); 
+    private _mario_pipe_Audio: string = path.join(this._basePath, 'audio', 'mario_pipe.wav');
 
     // Delete File
-    private _death_Audio: string = path.join(this._basePath, 'audio', 'death.mp3'); 
+    private _death_Audio: string = path.join(this._basePath, 'audio', 'death.wav');
 
     // Save File
-    private _level_complete_Audio: string = path.join(this._basePath, 'audio', 'level_complete.mp3'); 
+    private _level_complete_Audio: string = path.join(this._basePath, 'audio', 'level_complete.wav');
 
     // Open Project
-    private _here_we_go_Audio: string = path.join(this._basePath, 'audio', 'here_we_go.mp3'); 
+    private _here_we_go_Audio: string = path.join(this._basePath, 'audio', 'here_we_go.wav');
 
     // Split Screen
-    private _star_power_Audio: string = path.join(this._basePath, 'audio', 'star_power.mp3');
+    private _star_power_Audio: string = path.join(this._basePath, 'audio', 'star_power.wav');
 
     // Zen mode
-    private _mario_bros_Audio: string = path.join(this._basePath, 'audio', 'mario_bros.mp3'); 
+    private _mario_bros_Audio: string = path.join(this._basePath, 'audio', 'mario_bros.wav');
 
     // TEST SOUND 
-    private _retroAudio: string = path.join(this._basePath, 'audio', 'retro.wav'); 
+    private _retroAudio: string = path.join(this._basePath, 'audio', 'retro.wav');
 
 
     // NOTE Maybe Section
@@ -268,19 +268,46 @@ export class EditorListener {
     // MARIO WINS - build success
 
     constructor(private player: any) {
-        isNotArrowKey = false;
         this._disposable = vscode.Disposable.from(...this._subscriptions);
         this.player = {
             play: (filePath: string) => player.play(filePath, config)
         };
         // EXAMPLE of EVENT LISTENER
-            // vscode.workspace.onDidSaveTextDocument(this._EXAMPLECALLBACK, this, this._subscriptions);
+        // vscode.workspace.onDidSaveTextDocument(this._EXAMPLECALLBACK, this, this._subscriptions);
         // EVENT LISTENERS VVV
+        vscode.workspace.onDidChangeTextDocument(this._allKeysCallback, this, this._subscriptions);
 
 
-        
     }
     // CALL_BACKS VVVV
+    _allKeysCallback = debounce((event: vscode.TextDocumentChangeEvent) => {
+        if (!isActive) return;
+        let curDocument = vscode.window.activeTextEditor && vscode.window.activeTextEditor.document;
+        if (event.document !== curDocument || event.contentChanges.length === 0) return;
+
+        const pressedKey = event.contentChanges[0].text.toString();
+        const tempCheckLine = event.document.lineCount;
+        let checkLineCount = 0;
+
+        // WACKEY WAY to check if space was pressed
+        if (lineCount) {
+            checkLineCount = (tempCheckLine - lineCount) || 0;
+            if (checkLineCount > 0) {
+                this.player.play(this._mario_coin_Audio);
+                lineCount = tempCheckLine;
+            }
+        }
+
+        switch (pressedKey) {
+            // SPACE_BAR KEY
+            case ' ':
+                this.player.play(this._mario_jump_Audio);
+                break;
+            default:
+                break;
+        }
+
+    }, 100, { leading: true });
 
     dispose() {
         this._disposable.dispose();
