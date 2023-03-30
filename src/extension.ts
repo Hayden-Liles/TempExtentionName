@@ -244,7 +244,7 @@ export class EditorListener {
     // Save File ✔
     private _level_complete_Audio: string = path.join(this._basePath, 'audio', 'level_complete.wav');
 
-    // Open Project
+    // Open Project ✔
     private _here_we_go_Audio: string = path.join(this._basePath, 'audio', 'here_we_go.wav');
 
     // Split Screen
@@ -270,19 +270,23 @@ export class EditorListener {
         this.player = {
             play: (filePath: string) => player.play(filePath, config)
         };
+        // ON LOAD EVENT
+        // WHEN PROJECT LOADS
+        this._openProjectCallback();
         // EXAMPLE of EVENT LISTENER
         // vscode.workspace.onDidSaveTextDocument(this._EXAMPLECALLBACK, this, this._subscriptions);
         // EVENT LISTENERS VVV
         vscode.workspace.onDidChangeTextDocument(this._allKeysCallback, this, this._subscriptions);
-        // listeners for files
+        // listeners for file manipulation
         let folders = vscode.workspace.workspaceFolders;
         if (folders) {
             let watcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(folders[0], "*"));
+            // CREATE FILE
             watcher.onDidCreate(uri => this._createFileCallback());
+            // DELETE FILE
             watcher.onDidDelete(uri => this._deleteFileCallback());
         }
         vscode.workspace.onDidSaveTextDocument(this._saveFileCallback, this, this._subscriptions);
-
     }
     // CALL_BACKS VVVV
     _allKeysCallback = debounce((event: vscode.TextDocumentChangeEvent) => {
@@ -324,6 +328,11 @@ export class EditorListener {
 
     _saveFileCallback = debounce(() => {
         this.player.play(this._level_complete_Audio);
+    }, 100, { leading: true });
+    
+    _openProjectCallback = debounce(() => {
+        vscode.window.showInformationMessage("You got this!")
+        this.player.play(this._here_we_go_Audio);
     }, 100, { leading: true });
 
     dispose() {
