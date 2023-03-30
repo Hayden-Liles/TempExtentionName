@@ -226,25 +226,22 @@ export class EditorListener {
     //                                       AUDIO FILES
 
     //                                       Key Presses ✔
-    // Space_Bar Key
+    // Space_Bar Key ✔
     private _mario_jump_Audio: string = path.join(this._basePath, 'audio', 'mario_jump.wav');
 
-    // Enter Key
+    // Enter Key ✔
     private _mario_coin_Audio: string = path.join(this._basePath, 'audio', 'mario_coin.wav');
 
 
 
     //                                    File Manipulation
-    // Create New File
+    // Create New File ✔
     private _1_up_Audio: string = path.join(this._basePath, 'audio', '1_up.wav');
 
-    // Switch Between Files
-    private _mario_pipe_Audio: string = path.join(this._basePath, 'audio', 'mario_pipe.wav');
-
-    // Delete File
+    // Delete File ✔
     private _death_Audio: string = path.join(this._basePath, 'audio', 'death.wav');
 
-    // Save File
+    // Save File ✔
     private _level_complete_Audio: string = path.join(this._basePath, 'audio', 'level_complete.wav');
 
     // Open Project
@@ -256,8 +253,8 @@ export class EditorListener {
     // Zen mode
     private _mario_bros_Audio: string = path.join(this._basePath, 'audio', 'mario_bros.wav');
 
-    // TEST SOUND 
-    private _retroAudio: string = path.join(this._basePath, 'audio', 'retro.wav');
+    // Switch Between Files
+    private _mario_pipe_Audio: string = path.join(this._basePath, 'audio', 'mario_pipe.wav');
 
 
     // NOTE Maybe Section
@@ -266,6 +263,7 @@ export class EditorListener {
     // MARIO - POWER UP - creation of cunstructor
     // MARIO BROS GAME OVER - build error
     // MARIO WINS - build success
+
 
     constructor(private player: any) {
         this._disposable = vscode.Disposable.from(...this._subscriptions);
@@ -276,7 +274,14 @@ export class EditorListener {
         // vscode.workspace.onDidSaveTextDocument(this._EXAMPLECALLBACK, this, this._subscriptions);
         // EVENT LISTENERS VVV
         vscode.workspace.onDidChangeTextDocument(this._allKeysCallback, this, this._subscriptions);
-
+        // listeners for files
+        let folders = vscode.workspace.workspaceFolders;
+        if (folders) {
+            let watcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(folders[0], "*"));
+            watcher.onDidCreate(uri => this._createFileCallback());
+            watcher.onDidDelete(uri => this._deleteFileCallback());
+        }
+        vscode.workspace.onDidSaveTextDocument(this._saveFileCallback, this, this._subscriptions);
 
     }
     // CALL_BACKS VVVV
@@ -307,6 +312,18 @@ export class EditorListener {
                 break;
         }
 
+    }, 100, { leading: true });
+
+    _createFileCallback = debounce(() => {
+        this.player.play(this._1_up_Audio);
+    }, 100, { leading: true });
+
+    _deleteFileCallback = debounce(() => {
+        this.player.play(this._death_Audio);
+    }, 100, { leading: true });
+
+    _saveFileCallback = debounce(() => {
+        this.player.play(this._level_complete_Audio);
     }, 100, { leading: true });
 
     dispose() {
