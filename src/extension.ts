@@ -138,24 +138,27 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     vscode.commands.registerCommand('TempName.setVolume', async () => {
-        let input = await vscode.window.showInputBox()
+        let input = await vscode.window.showInputBox();
         let newVol = toInteger(input);
 
         switch (process.platform) {
             case 'darwin':
                 if (newVol > 10) {
-                    vscode.window.showInformationMessage("Volume increased to maximum")
+                    vscode.window.showInformationMessage("Volume increased to maximum");
                     config.macVol = 10;
                 } else if (newVol < 1) {
-                    vscode.window.showInformationMessage("Volume decreased to minimum")
-                    config.macVol = 1
+                    vscode.window.showInformationMessage("Volume decreased to minimum");
+                    config.macVol = 1;
                 } else {
-                    if (config.macVol < newVol)
-                        vscode.window.showInformationMessage("Volume increased to " + newVol)
-                    else if (config.macVol > newVol)
-                        vscode.window.showInformationMessage("Volume decreased to " + newVol)
-                    else
+                    if (config.macVol < newVol){
+                        vscode.window.showInformationMessage("Volume increased to " + newVol);
+					}
+                    else if (config.macVol > newVol){
+                        vscode.window.showInformationMessage("Volume decreased to " + newVol);
+					}
+                    else{
                         vscode.window.showWarningMessage("Volume already at " + newVol);
+					}
 
                     config.macVol = newVol;
                 }
@@ -165,19 +168,22 @@ export function activate(context: vscode.ExtensionContext) {
 
             case 'win32':
                 if (newVol > 100) {
-                    vscode.window.showInformationMessage("Volume increased to maximum")
+                    vscode.window.showInformationMessage("Volume increased to maximum");
                     config.winVol = 100;
                 }
                 else if (newVol < 10) {
-                    vscode.window.showInformationMessage("Volume decreased to minimum")
-                    config.winVol = 10
+                    vscode.window.showInformationMessage("Volume decreased to minimum");
+                    config.winVol = 10;
                 } else {
-                    if (config.winVol < newVol)
-                        vscode.window.showInformationMessage("Volume increased to " + newVol)
-                    else if (config.winVol > newVol)
-                        vscode.window.showInformationMessage("Volume decreased to " + newVol)
-                    else
+                    if (config.winVol < newVol){
+                        vscode.window.showInformationMessage("Volume increased to " + newVol);
+					}
+                    else if (config.winVol > newVol){
+                        vscode.window.showInformationMessage("Volume decreased to " + newVol);
+					}
+                    else{
                         vscode.window.showWarningMessage("Volume already at " + newVol);
+					}
 
                     config.winVol = newVol;
                 }
@@ -187,18 +193,21 @@ export function activate(context: vscode.ExtensionContext) {
 
             case 'linux':
                 if (newVol > 10) {
-                    vscode.window.showInformationMessage("Volume increased to maximum")
+                    vscode.window.showInformationMessage("Volume increased to maximum");
                     config.linuxVol = 10;
                 } else if (newVol < 1) {
-                    vscode.window.showInformationMessage("Volume decreased to minimum")
-                    config.linuxVol = 1
+                    vscode.window.showInformationMessage("Volume decreased to minimum");
+                    config.linuxVol = 1;
                 } else {
-                    if (config.linuxVol < newVol)
-                        vscode.window.showInformationMessage("Volume increased to " + newVol)
-                    else if (config.linuxVol > newVol)
-                        vscode.window.showInformationMessage("Volume decreased to " + newVol)
-                    else
+                    if (config.linuxVol < newVol){
+                        vscode.window.showInformationMessage("Volume increased to " + newVol);
+					}
+                    else if (config.linuxVol > newVol){
+                        vscode.window.showInformationMessage("Volume decreased to " + newVol);
+					}
+                    else{	
                         vscode.window.showWarningMessage("Volume already at " + newVol);
+					}
 
                     config.linuxVol = newVol;
                 }
@@ -227,34 +236,35 @@ export class EditorListener {
 
     //                                       Key Presses ✔
     // Space_Bar Key ✔
-    private _mario_jump_Audio: string = path.join(this._basePath, 'audio', 'mario_jump.wav');
+    private _marioJumpAudio: string = path.join(this._basePath, 'audio', 'mario_jump.wav');
 
     // Enter Key ✔
-    private _mario_coin_Audio: string = path.join(this._basePath, 'audio', 'mario_coin.wav');
+    private _marioCoinAudio: string = path.join(this._basePath, 'audio', 'mario_coin.wav');
 
 
 
     //                                    File Manipulation
     // Create New File ✔
-    private _1_up_Audio: string = path.join(this._basePath, 'audio', '1_up.wav');
+    private _1UpAudio: string = path.join(this._basePath, 'audio', '1_up.wav');
 
     // Delete File ✔
-    private _death_Audio: string = path.join(this._basePath, 'audio', 'death.wav');
+    private _deathAudio: string = path.join(this._basePath, 'audio', 'death.wav');
 
     // Save File ✔
-    private _level_complete_Audio: string = path.join(this._basePath, 'audio', 'level_complete.wav');
+    private _levelCompleteAudio: string = path.join(this._basePath, 'audio', 'level_complete.wav');
 
     // Open Project ✔
-    private _here_we_go_Audio: string = path.join(this._basePath, 'audio', 'here_we_go.wav');
+    private _hereWeGoAudio: string = path.join(this._basePath, 'audio', 'here_we_go.wav');
 
     // Split Screen
-    private _star_power_Audio: string = path.join(this._basePath, 'audio', 'star_power.wav');
+    private _starPowerAudio: string = path.join(this._basePath, 'audio', 'star_power.wav');
 
     // Zen mode
-    private _mario_bros_Audio: string = path.join(this._basePath, 'audio', 'mario_bros.wav');
+    private _marioBrosAudio: string = path.join(this._basePath, 'audio', 'mario_bros.wav');
 
     // Switch Between Files
-    private _mario_pipe_Audio: string = path.join(this._basePath, 'audio', 'mario_pipe.wav');
+    private _marioPipeAudio: string = path.join(this._basePath, 'audio', 'mario_pipe.wav');
+    
 
 
     // NOTE Maybe Section
@@ -287,12 +297,13 @@ export class EditorListener {
             watcher.onDidDelete(uri => this._deleteFileCallback());
         }
         vscode.workspace.onDidSaveTextDocument(this._saveFileCallback, this, this._subscriptions);
+        vscode.window.onDidChangeActiveTextEditor(this._switchFileCallback, this, this._subscriptions);
     }
     // CALL_BACKS VVVV
     _allKeysCallback = debounce((event: vscode.TextDocumentChangeEvent) => {
-        if (!isActive) return;
+        if (!isActive) {return;}
         let curDocument = vscode.window.activeTextEditor && vscode.window.activeTextEditor.document;
-        if (event.document !== curDocument || event.contentChanges.length === 0) return;
+        if (event.document !== curDocument || event.contentChanges.length === 0) {return;}
 
         const pressedKey = event.contentChanges[0].text.toString();
         const tempCheckLine = event.document.lineCount;
@@ -302,7 +313,7 @@ export class EditorListener {
         if (lineCount) {
             checkLineCount = (tempCheckLine - lineCount) || 0;
             if (checkLineCount > 0) {
-                this.player.play(this._mario_coin_Audio);
+                this.player.play(this._marioCoinAudio);
                 lineCount = tempCheckLine;
             }
         }
@@ -310,31 +321,35 @@ export class EditorListener {
         switch (pressedKey) {
             // SPACE_BAR KEY
             case ' ':
-                this.player.play(this._mario_jump_Audio);
+                this.player.play(this._marioJumpAudio);
                 break;
             default:
                 break;
         }
 
-    }, 100, { leading: true });
+    }, 0, { leading: true });
 
     _createFileCallback = debounce(() => {
-        this.player.play(this._1_up_Audio);
-    }, 100, { leading: true });
+        this.player.play(this._1UpAudio);
+    }, 0, { leading: true });
 
     _deleteFileCallback = debounce(() => {
-        this.player.play(this._death_Audio);
-    }, 100, { leading: true });
+        this.player.play(this._deathAudio);
+    }, 0, { leading: true });
 
     _saveFileCallback = debounce(() => {
-        this.player.play(this._level_complete_Audio);
-    }, 100, { leading: true });
+        this.player.play(this._levelCompleteAudio);
+    }, 0, { leading: true });
     
     _openProjectCallback = debounce(() => {
-        vscode.window.showInformationMessage("You got this!")
-        this.player.play(this._here_we_go_Audio);
-    }, 100, { leading: true });
+        vscode.window.showInformationMessage("You got this!");
+        this.player.play(this._hereWeGoAudio);
+    }, 0, { leading: true });
 
+    _switchFileCallback = debounce(() => {
+        this.player.play(this._marioPipeAudio);
+    }, 0, { leading: true });
+    
     dispose() {
         this._disposable.dispose();
     }
