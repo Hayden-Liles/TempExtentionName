@@ -398,7 +398,7 @@ export class EditorListener {
         setTimeout(() => {
             soundPlaying = false;
         }, this._marioPipeAudio.audioLength);
-    }, 0, { leading: true });
+    }, 130);
     
     _splitScreenCallback = debounce(() => {
         if(soundPlaying === true) { return; }
