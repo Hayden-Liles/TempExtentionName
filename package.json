@@ -17,6 +17,51 @@
   "activationEvents": ["*"],
   "main": "./out/extension.js",
   "contributes": {
+    "configuration": {
+      "title": "TempName",
+      "properties": {
+        "TempName.Space_Key": {
+          "type": "boolean",
+          "default": true,
+          "description": "Space Bar Key Sounds"
+        },
+        "TempName.Enter_Key": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enter Key Sounds"
+        },
+        "TempName.Create_File": {
+          "type": "boolean",
+          "default": true,
+          "description": "Create File Sounds"
+        },
+        "TempName.Delete_File": {
+          "type": "boolean",
+          "default": true,
+          "description": "Delete File Sounds"
+        },
+        "TempName.Save_File": {
+          "type": "boolean",
+          "default": true,
+          "description": "Save File Sounds"
+        },
+        "TempName.Open_Project": {
+          "type": "boolean",
+          "default": true,
+          "description": "Open Project Sounds"
+        },
+        "TempName.Split_Screen": {
+          "type": "boolean",
+          "default": true,
+          "description": "Split Screen Sounds"
+        },
+        "TempName.Switch_File": {
+          "type": "boolean",
+          "default": true,
+          "description": "Switch File Sounds"
+        }
+      }
+    },
     "commands": [
       {
           "command": "TempName.enable",

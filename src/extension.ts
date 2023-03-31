@@ -228,11 +228,6 @@ export function activate(context: vscode.ExtensionContext) {
             listener._splitScreenCallback();
         }
     }));
-        vscode.workspace.onDidChangeConfiguration((event: vscode.ConfigurationChangeEvent) => {
-        if (event.affectsConfiguration('zenMode.hideTabs') || event.affectsConfiguration('zenMode.hideStatusBar')) {
-            // code here
-        }
-    });
 }
 
 export function deactivate() { }
@@ -268,11 +263,13 @@ export class EditorListener {
     // Split Screen ✔
     private _starPowerAudio = { path: path.join(this._basePath, 'audio', 'star_power.wav'), audioLength: 5500 };
 
-    // Zen mode
+    // TBD
     private _marioBrosAudio = { path: path.join(this._basePath, 'audio', 'mario_bros.wav'), audioLength: 14850 };
 
     // Switch Between Files ✔
     private _marioPipeAudio = { path: path.join(this._basePath, 'audio', 'mario_pipe.wav'), audioLength: 800 };
+
+
 
 
 
@@ -309,6 +306,8 @@ export class EditorListener {
         vscode.workspace.onDidSaveTextDocument(this._saveFileCallback, this, this._subscriptions);
         vscode.window.onDidChangeActiveTextEditor(this._switchFileCallback, this, this._subscriptions);
     }
+
+
     // CALL_BACKS VVVV
     _allKeysCallback = debounce((event: vscode.TextDocumentChangeEvent) => {
         if (!isActive) { return; }
@@ -319,9 +318,10 @@ export class EditorListener {
         const tempCheckLine = event.document.lineCount;
         let checkLineCount = 0;
 
-        // WACKEY WAY to check if Back_Space Key was pressed
+        // WACKEY WAY to check if Enter Key was pressed
         if (lineCount) {
             checkLineCount = (tempCheckLine - lineCount) || 0;
+            if (vscode.workspace.getConfiguration('TempName').get('Enter_Key') !== true){return;}
             if (checkLineCount > 0 && soundPlaying !== true) {
                 soundPlaying = true;
                 this.player.play(this._marioCoinAudio.path);
@@ -335,6 +335,7 @@ export class EditorListener {
         switch (pressedKey) {
             // SPACE_BAR KEY
             case ' ':
+                if (vscode.workspace.getConfiguration('TempName').get('Space_Key') !== true){return;}
                 if (soundPlaying === true) { return; }
                 soundPlaying = true;
                 this.player.play(this._marioJumpAudio.path);
@@ -349,6 +350,7 @@ export class EditorListener {
     }, 0, { leading: true });
 
     _createFileCallback = debounce(() => {
+        if(vscode.workspace.getConfiguration('TempName').get('Create_File') !== true){return;}
         if (soundPlaying === true) { return; }
         soundPlaying = true;
         this.player.play(this._1UpAudio.path);
@@ -358,6 +360,7 @@ export class EditorListener {
     }, 0, { leading: true });
 
     _deleteFileCallback = debounce(() => {
+        if(vscode.workspace.getConfiguration('TempName').get('Delete_File') !== true){return;}
         if (soundPlaying === true) { return; }
         soundPlaying = true;
         this.player.play(this._deathAudio.path);
@@ -367,6 +370,7 @@ export class EditorListener {
     }, 0, { leading: true });
 
     _saveFileCallback = debounce(() => {
+        if(vscode.workspace.getConfiguration('TempName').get('Save_File') !== true){return;}
         if (soundPlaying === true) { return; }
         soundPlaying = true;
         this.player.play(this._levelCompleteAudio.path);
@@ -376,6 +380,7 @@ export class EditorListener {
     }, 0, { leading: true });
 
     _openProjectCallback = debounce(() => {
+        if(vscode.workspace.getConfiguration('TempName').get('Open_Project') !== true){return;}
         if (soundPlaying === true) { return; }
         soundPlaying = true;
         vscode.window.showInformationMessage("You got this!");
@@ -386,6 +391,7 @@ export class EditorListener {
     }, 0, { leading: true });
 
     _switchFileCallback = debounce(() => {
+        if(vscode.workspace.getConfiguration('TempName').get('Switch_File') !== true){return;}
         if (soundPlaying === true) { return; }
         soundPlaying = true;
         this.player.play(this._marioPipeAudio.path);
@@ -395,6 +401,7 @@ export class EditorListener {
     }, 130);
 
     _splitScreenCallback = debounce(() => {
+        if(vscode.workspace.getConfiguration('TempName').get('Split_Screen') !== true){return;}
         if (soundPlaying === true) { return; }
         soundPlaying = true;
         this.player.play(this._starPowerAudio.path);
@@ -402,6 +409,7 @@ export class EditorListener {
             soundPlaying = false;
         }, this._starPowerAudio.audioLength);
     }, 0, { leading: true });
+
 
     dispose() {
         this._disposable.dispose();
