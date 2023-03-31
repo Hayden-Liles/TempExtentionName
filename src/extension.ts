@@ -257,7 +257,7 @@ export class EditorListener {
 
     // Delete File ✔
     // private _deathAudio: string = path.join(this._basePath, 'audio', 'death.wav');
-    private _deathAudio = {path: path.join(this._basePath, 'audio', 'death.wav'), audioLength: 2700};
+    private _deathAudio = {path: path.join(this._basePath, 'audio', 'death.wav'), audioLength: 2780};
 
 
     // Save File ✔
@@ -270,15 +270,15 @@ export class EditorListener {
     
     // Split Screen
     // private _starPowerAudio: string = path.join(this._basePath, 'audio', 'star_power.wav');
-    private _starPowerAudio = {path: path.join(this._basePath, 'audio', 'star_power.wav'), audioLength: 5010};
+    private _starPowerAudio = {path: path.join(this._basePath, 'audio', 'star_power.wav'), audioLength: 5500};
 
     // Zen mode
     // private _marioBrosAudio: string = path.join(this._basePath, 'audio', 'mario_bros.wav');
     private _marioBrosAudio = {path: path.join(this._basePath, 'audio', 'mario_bros.wav'), audioLength: 14850};
 
-    // Switch Between Files
+    // Switch Between Files ✔
     // private _marioPipeAudio: string = path.join(this._basePath, 'audio', 'mario_pipe.wav');
-    private _marioPipeAudio = {path: path.join(this._basePath, 'audio', 'mario_pipe.wav'), audioLength: 710};
+    private _marioPipeAudio = {path: path.join(this._basePath, 'audio', 'mario_pipe.wav'), audioLength: 800};
 
 
 
@@ -360,7 +360,7 @@ export class EditorListener {
         this.player.play(this._1UpAudio.path);
         setTimeout(() => {
             soundPlaying = false;
-        }, this._marioCoinAudio.audioLength);
+        }, this._1UpAudio.audioLength);
     }, 0, { leading: true });
 
     _deleteFileCallback = debounce(() => {
@@ -369,7 +369,7 @@ export class EditorListener {
         this.player.play(this._deathAudio.path);
         setTimeout(() => {
             soundPlaying = false;
-        }, this._marioCoinAudio.audioLength);
+        }, this._deathAudio.audioLength);
     }, 0, { leading: true });
 
     _saveFileCallback = debounce(() => {
@@ -378,7 +378,7 @@ export class EditorListener {
         this.player.play(this._levelCompleteAudio.path);
         setTimeout(() => {
             soundPlaying = false;
-        }, this._marioCoinAudio.audioLength);
+        }, this._levelCompleteAudio.audioLength);
     }, 0, { leading: true });
 
     _openProjectCallback = debounce(() => {
@@ -388,7 +388,7 @@ export class EditorListener {
         this.player.play(this._hereWeGoAudio.path);
         setTimeout(() => {
             soundPlaying = false;
-        }, this._marioCoinAudio.audioLength);
+        }, this._hereWeGoAudio.audioLength);
     }, 0, { leading: true });
 
     _switchFileCallback = debounce(() => {
@@ -397,16 +397,16 @@ export class EditorListener {
         this.player.play(this._marioPipeAudio.path);
         setTimeout(() => {
             soundPlaying = false;
-        }, this._marioCoinAudio.audioLength);
+        }, this._marioPipeAudio.audioLength);
     }, 0, { leading: true });
-
+    
     _splitScreenCallback = debounce(() => {
         if(soundPlaying === true) { return; }
         soundPlaying = true;
         this.player.play(this._starPowerAudio.path);
         setTimeout(() => {
             soundPlaying = false;
-        }, this._marioCoinAudio.audioLength);
+        }, this._starPowerAudio.audioLength);
     }, 0, { leading: true });
 
     dispose() {
