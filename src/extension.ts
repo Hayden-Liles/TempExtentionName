@@ -9,6 +9,7 @@ import { keys, toInteger } from 'lodash';
 
 let listener: EditorListener;
 let isActive: boolean;
+let soundPlaying: boolean = false;
 let config: PlayerConfig = {
     macVol: 1,
     winVol: 100,
@@ -136,7 +137,6 @@ export function activate(context: vscode.ExtensionContext) {
 
         vscode.window.showInformationMessage('Sounds volume lowered: ' + newVol);
     });
-
     vscode.commands.registerCommand('TempName.setVolume', async () => {
         let input = await vscode.window.showInputBox();
         let newVol = toInteger(input);
@@ -150,15 +150,15 @@ export function activate(context: vscode.ExtensionContext) {
                     vscode.window.showInformationMessage("Volume decreased to minimum");
                     config.macVol = 1;
                 } else {
-                    if (config.macVol < newVol){
+                    if (config.macVol < newVol) {
                         vscode.window.showInformationMessage("Volume increased to " + newVol);
-					}
-                    else if (config.macVol > newVol){
+                    }
+                    else if (config.macVol > newVol) {
                         vscode.window.showInformationMessage("Volume decreased to " + newVol);
-					}
-                    else{
+                    }
+                    else {
                         vscode.window.showWarningMessage("Volume already at " + newVol);
-					}
+                    }
 
                     config.macVol = newVol;
                 }
@@ -175,15 +175,15 @@ export function activate(context: vscode.ExtensionContext) {
                     vscode.window.showInformationMessage("Volume decreased to minimum");
                     config.winVol = 10;
                 } else {
-                    if (config.winVol < newVol){
+                    if (config.winVol < newVol) {
                         vscode.window.showInformationMessage("Volume increased to " + newVol);
-					}
-                    else if (config.winVol > newVol){
+                    }
+                    else if (config.winVol > newVol) {
                         vscode.window.showInformationMessage("Volume decreased to " + newVol);
-					}
-                    else{
+                    }
+                    else {
                         vscode.window.showWarningMessage("Volume already at " + newVol);
-					}
+                    }
 
                     config.winVol = newVol;
                 }
@@ -199,15 +199,15 @@ export function activate(context: vscode.ExtensionContext) {
                     vscode.window.showInformationMessage("Volume decreased to minimum");
                     config.linuxVol = 1;
                 } else {
-                    if (config.linuxVol < newVol){
+                    if (config.linuxVol < newVol) {
                         vscode.window.showInformationMessage("Volume increased to " + newVol);
-					}
-                    else if (config.linuxVol > newVol){
+                    }
+                    else if (config.linuxVol > newVol) {
                         vscode.window.showInformationMessage("Volume decreased to " + newVol);
-					}
-                    else{	
+                    }
+                    else {
                         vscode.window.showWarningMessage("Volume already at " + newVol);
-					}
+                    }
 
                     config.linuxVol = newVol;
                 }
@@ -222,6 +222,12 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     context.subscriptions.push(listener);
+    context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(editor => {
+        if (editor && editor?.viewColumn !== vscode.ViewColumn.One) {
+            listener._splitScreenCallback();
+        }
+    }));
+
 }
 
 export function deactivate() { }
@@ -236,35 +242,45 @@ export class EditorListener {
 
     //                                       Key Presses ✔
     // Space_Bar Key ✔
-    private _marioJumpAudio: string = path.join(this._basePath, 'audio', 'mario_jump.wav');
+    // private _marioJumpAudio: string = path.join(this._basePath, 'audio', 'mario_jump.wav');
+    private _marioJumpAudio = {path: path.join(this._basePath, 'audio', 'mario_jump.wav'), audioLength: 450};
 
     // Enter Key ✔
-    private _marioCoinAudio: string = path.join(this._basePath, 'audio', 'mario_coin.wav');
-
-
+    // private _marioCoinAudio: string = path.join(this._basePath, 'audio', 'mario_coin.wav');
+    private _marioCoinAudio = {path: path.join(this._basePath, 'audio', 'mario_coin.wav'), audioLength: 900};
 
     //                                    File Manipulation
     // Create New File ✔
-    private _1UpAudio: string = path.join(this._basePath, 'audio', '1_up.wav');
+    // private _1UpAudio: string = path.join(this._basePath, 'audio', '1_up.wav');
+    private _1UpAudio = {path: (path.join(this._basePath, 'audio', '1_up.wav')), audioLength: 880};
+
 
     // Delete File ✔
-    private _deathAudio: string = path.join(this._basePath, 'audio', 'death.wav');
+    // private _deathAudio: string = path.join(this._basePath, 'audio', 'death.wav');
+    private _deathAudio = {path: path.join(this._basePath, 'audio', 'death.wav'), audioLength: 2700};
+
 
     // Save File ✔
-    private _levelCompleteAudio: string = path.join(this._basePath, 'audio', 'level_complete.wav');
+    // private _levelCompleteAudio: string = path.join(this._basePath, 'audio', 'level_complete.wav');
+    private _levelCompleteAudio = {path: path.join(this._basePath, 'audio', 'level_complete.wav'), audioLength: 7700};
 
     // Open Project ✔
-    private _hereWeGoAudio: string = path.join(this._basePath, 'audio', 'here_we_go.wav');
-
+    // private _hereWeGoAudio: string = path.join(this._basePath, 'audio', 'here_we_go.wav');
+    private _hereWeGoAudio = {path: path.join(this._basePath, 'audio', 'here_we_go.wav'), audioLength: 3950};
+    
     // Split Screen
-    private _starPowerAudio: string = path.join(this._basePath, 'audio', 'star_power.wav');
+    // private _starPowerAudio: string = path.join(this._basePath, 'audio', 'star_power.wav');
+    private _starPowerAudio = {path: path.join(this._basePath, 'audio', 'star_power.wav'), audioLength: 5010};
 
     // Zen mode
-    private _marioBrosAudio: string = path.join(this._basePath, 'audio', 'mario_bros.wav');
+    // private _marioBrosAudio: string = path.join(this._basePath, 'audio', 'mario_bros.wav');
+    private _marioBrosAudio = {path: path.join(this._basePath, 'audio', 'mario_bros.wav'), audioLength: 14850};
 
     // Switch Between Files
-    private _marioPipeAudio: string = path.join(this._basePath, 'audio', 'mario_pipe.wav');
-    
+    // private _marioPipeAudio: string = path.join(this._basePath, 'audio', 'mario_pipe.wav');
+    private _marioPipeAudio = {path: path.join(this._basePath, 'audio', 'mario_pipe.wav'), audioLength: 710};
+
+
 
 
     // NOTE Maybe Section
@@ -301,27 +317,36 @@ export class EditorListener {
     }
     // CALL_BACKS VVVV
     _allKeysCallback = debounce((event: vscode.TextDocumentChangeEvent) => {
-        if (!isActive) {return;}
+        if (!isActive) { return; }
         let curDocument = vscode.window.activeTextEditor && vscode.window.activeTextEditor.document;
-        if (event.document !== curDocument || event.contentChanges.length === 0) {return;}
+        if (event.document !== curDocument || event.contentChanges.length === 0) { return; }
 
         const pressedKey = event.contentChanges[0].text.toString();
         const tempCheckLine = event.document.lineCount;
         let checkLineCount = 0;
 
-        // WACKEY WAY to check if space was pressed
+        // WACKEY WAY to check if Back_Space Key was pressed
         if (lineCount) {
             checkLineCount = (tempCheckLine - lineCount) || 0;
-            if (checkLineCount > 0) {
-                this.player.play(this._marioCoinAudio);
+            if (checkLineCount > 0 && soundPlaying !== true) {
+                soundPlaying = true;
+                this.player.play(this._marioCoinAudio.path);
                 lineCount = tempCheckLine;
+                setTimeout(() => {
+                    soundPlaying = false;
+                }, this._marioCoinAudio.audioLength);
             }
         }
 
         switch (pressedKey) {
             // SPACE_BAR KEY
             case ' ':
-                this.player.play(this._marioJumpAudio);
+                if(soundPlaying === true) { return; }
+                soundPlaying = true;
+                this.player.play(this._marioJumpAudio.path);
+                setTimeout(() => {
+                    soundPlaying = false;
+                }, this._marioJumpAudio.audioLength);
                 break;
             default:
                 break;
@@ -330,26 +355,60 @@ export class EditorListener {
     }, 0, { leading: true });
 
     _createFileCallback = debounce(() => {
-        this.player.play(this._1UpAudio);
+        if(soundPlaying === true) { return; }
+        soundPlaying = true;
+        this.player.play(this._1UpAudio.path);
+        setTimeout(() => {
+            soundPlaying = false;
+        }, this._marioCoinAudio.audioLength);
     }, 0, { leading: true });
 
     _deleteFileCallback = debounce(() => {
-        this.player.play(this._deathAudio);
+        if(soundPlaying === true) { return; }
+        soundPlaying = true;
+        this.player.play(this._deathAudio.path);
+        setTimeout(() => {
+            soundPlaying = false;
+        }, this._marioCoinAudio.audioLength);
     }, 0, { leading: true });
 
     _saveFileCallback = debounce(() => {
-        this.player.play(this._levelCompleteAudio);
+        if(soundPlaying === true) { return; }
+        soundPlaying = true;
+        this.player.play(this._levelCompleteAudio.path);
+        setTimeout(() => {
+            soundPlaying = false;
+        }, this._marioCoinAudio.audioLength);
     }, 0, { leading: true });
-    
+
     _openProjectCallback = debounce(() => {
+        if(soundPlaying === true) { return; }
+        soundPlaying = true;
         vscode.window.showInformationMessage("You got this!");
-        this.player.play(this._hereWeGoAudio);
+        this.player.play(this._hereWeGoAudio.path);
+        setTimeout(() => {
+            soundPlaying = false;
+        }, this._marioCoinAudio.audioLength);
     }, 0, { leading: true });
 
     _switchFileCallback = debounce(() => {
-        this.player.play(this._marioPipeAudio);
+        if(soundPlaying === true) { return; }
+        soundPlaying = true;
+        this.player.play(this._marioPipeAudio.path);
+        setTimeout(() => {
+            soundPlaying = false;
+        }, this._marioCoinAudio.audioLength);
     }, 0, { leading: true });
-    
+
+    _splitScreenCallback = debounce(() => {
+        if(soundPlaying === true) { return; }
+        soundPlaying = true;
+        this.player.play(this._starPowerAudio.path);
+        setTimeout(() => {
+            soundPlaying = false;
+        }, this._marioCoinAudio.audioLength);
+    }, 0, { leading: true });
+
     dispose() {
         this._disposable.dispose();
     }
@@ -359,4 +418,4 @@ export class EditorListener {
 // NOTE Callback Example
 // _saveCallback = debounce(() => {
 //     this.player.play(this._AUDIO_FILE)
-// }, 100, { leading: true });
+// }, 0, { leading: true });
