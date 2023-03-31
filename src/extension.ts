@@ -252,10 +252,8 @@ export class EditorListener {
     // Create New File ✔
     private _1UpAudio = {path: (path.join(this._basePath, 'audio', '1_up.wav')), audioLength: 880};
 
-
     // Delete File ✔
     private _deathAudio = {path: path.join(this._basePath, 'audio', 'death.wav'), audioLength: 2780};
-
 
     // Save File ✔
     private _levelCompleteAudio = {path: path.join(this._basePath, 'audio', 'level_complete.wav'), audioLength: 7700};
@@ -263,11 +261,10 @@ export class EditorListener {
     // Open Project ✔
     private _hereWeGoAudio = {path: path.join(this._basePath, 'audio', 'here_we_go.wav'), audioLength: 3950};
     
-    // Split Screen
+    // Split Screen ✔
     private _starPowerAudio = {path: path.join(this._basePath, 'audio', 'star_power.wav'), audioLength: 5500};
 
     // Zen mode
-    // private _marioBrosAudio: string = path.join(this._basePath, 'audio', 'mario_bros.wav');
     private _marioBrosAudio = {path: path.join(this._basePath, 'audio', 'mario_bros.wav'), audioLength: 14850};
 
     // Switch Between Files ✔
