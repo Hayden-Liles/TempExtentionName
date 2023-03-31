@@ -6,6 +6,7 @@ import * as path from 'path';
 import player, { PlayerConfig } from './player';
 import debounce = require('lodash.debounce');
 import { keys, toInteger } from 'lodash';
+import { ALL } from 'dns';
 
 let listener: EditorListener;
 let isActive: boolean;
@@ -242,34 +243,27 @@ export class EditorListener {
 
     //                                       Key Presses ✔
     // Space_Bar Key ✔
-    // private _marioJumpAudio: string = path.join(this._basePath, 'audio', 'mario_jump.wav');
     private _marioJumpAudio = {path: path.join(this._basePath, 'audio', 'mario_jump.wav'), audioLength: 450};
 
     // Enter Key ✔
-    // private _marioCoinAudio: string = path.join(this._basePath, 'audio', 'mario_coin.wav');
     private _marioCoinAudio = {path: path.join(this._basePath, 'audio', 'mario_coin.wav'), audioLength: 900};
 
     //                                    File Manipulation
     // Create New File ✔
-    // private _1UpAudio: string = path.join(this._basePath, 'audio', '1_up.wav');
     private _1UpAudio = {path: (path.join(this._basePath, 'audio', '1_up.wav')), audioLength: 880};
 
 
     // Delete File ✔
-    // private _deathAudio: string = path.join(this._basePath, 'audio', 'death.wav');
     private _deathAudio = {path: path.join(this._basePath, 'audio', 'death.wav'), audioLength: 2780};
 
 
     // Save File ✔
-    // private _levelCompleteAudio: string = path.join(this._basePath, 'audio', 'level_complete.wav');
     private _levelCompleteAudio = {path: path.join(this._basePath, 'audio', 'level_complete.wav'), audioLength: 7700};
 
     // Open Project ✔
-    // private _hereWeGoAudio: string = path.join(this._basePath, 'audio', 'here_we_go.wav');
     private _hereWeGoAudio = {path: path.join(this._basePath, 'audio', 'here_we_go.wav'), audioLength: 3950};
     
     // Split Screen
-    // private _starPowerAudio: string = path.join(this._basePath, 'audio', 'star_power.wav');
     private _starPowerAudio = {path: path.join(this._basePath, 'audio', 'star_power.wav'), audioLength: 5500};
 
     // Zen mode
@@ -277,7 +271,6 @@ export class EditorListener {
     private _marioBrosAudio = {path: path.join(this._basePath, 'audio', 'mario_bros.wav'), audioLength: 14850};
 
     // Switch Between Files ✔
-    // private _marioPipeAudio: string = path.join(this._basePath, 'audio', 'mario_pipe.wav');
     private _marioPipeAudio = {path: path.join(this._basePath, 'audio', 'mario_pipe.wav'), audioLength: 800};
 
 
@@ -306,7 +299,7 @@ export class EditorListener {
         // listeners for file manipulation
         let folders = vscode.workspace.workspaceFolders;
         if (folders) {
-            let watcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(folders[0], "*"));
+            let watcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(folders[0], "**/*"));
             // CREATE FILE
             watcher.onDidCreate(uri => this._createFileCallback());
             // DELETE FILE
