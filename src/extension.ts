@@ -22,7 +22,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     isActive = context.globalState.get('TempName', true);
     config.macVol = context.globalState.get('mac_volume', 1);
-    config.winVol = context.globalState.get('win_volume', 100);
+    config.winVol = context.globalState.get('win_volume', 50);
     config.linuxVol = context.globalState.get('linux_volume', 1);
 
     listener = listener || new EditorListener(player);
