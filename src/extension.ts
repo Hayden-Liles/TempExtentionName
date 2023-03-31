@@ -228,7 +228,11 @@ export function activate(context: vscode.ExtensionContext) {
             listener._splitScreenCallback();
         }
     }));
-
+        vscode.workspace.onDidChangeConfiguration((event: vscode.ConfigurationChangeEvent) => {
+        if (event.affectsConfiguration('zenMode.hideTabs') || event.affectsConfiguration('zenMode.hideStatusBar')) {
+            // code here
+        }
+    });
 }
 
 export function deactivate() { }
@@ -243,32 +247,32 @@ export class EditorListener {
 
     //                                       Key Presses ✔
     // Space_Bar Key ✔
-    private _marioJumpAudio = {path: path.join(this._basePath, 'audio', 'mario_jump.wav'), audioLength: 450};
+    private _marioJumpAudio = { path: path.join(this._basePath, 'audio', 'mario_jump.wav'), audioLength: 450 };
 
     // Enter Key ✔
-    private _marioCoinAudio = {path: path.join(this._basePath, 'audio', 'mario_coin.wav'), audioLength: 900};
+    private _marioCoinAudio = { path: path.join(this._basePath, 'audio', 'mario_coin.wav'), audioLength: 900 };
 
     //                                    File Manipulation
     // Create New File ✔
-    private _1UpAudio = {path: (path.join(this._basePath, 'audio', '1_up.wav')), audioLength: 880};
+    private _1UpAudio = { path: (path.join(this._basePath, 'audio', '1_up.wav')), audioLength: 880 };
 
     // Delete File ✔
-    private _deathAudio = {path: path.join(this._basePath, 'audio', 'death.wav'), audioLength: 2780};
+    private _deathAudio = { path: path.join(this._basePath, 'audio', 'death.wav'), audioLength: 2780 };
 
     // Save File ✔
-    private _levelCompleteAudio = {path: path.join(this._basePath, 'audio', 'level_complete.wav'), audioLength: 7700};
+    private _levelCompleteAudio = { path: path.join(this._basePath, 'audio', 'level_complete.wav'), audioLength: 7700 };
 
     // Open Project ✔
-    private _hereWeGoAudio = {path: path.join(this._basePath, 'audio', 'here_we_go.wav'), audioLength: 3950};
-    
+    private _hereWeGoAudio = { path: path.join(this._basePath, 'audio', 'here_we_go.wav'), audioLength: 3950 };
+
     // Split Screen ✔
-    private _starPowerAudio = {path: path.join(this._basePath, 'audio', 'star_power.wav'), audioLength: 5500};
+    private _starPowerAudio = { path: path.join(this._basePath, 'audio', 'star_power.wav'), audioLength: 5500 };
 
     // Zen mode
-    private _marioBrosAudio = {path: path.join(this._basePath, 'audio', 'mario_bros.wav'), audioLength: 14850};
+    private _marioBrosAudio = { path: path.join(this._basePath, 'audio', 'mario_bros.wav'), audioLength: 14850 };
 
     // Switch Between Files ✔
-    private _marioPipeAudio = {path: path.join(this._basePath, 'audio', 'mario_pipe.wav'), audioLength: 800};
+    private _marioPipeAudio = { path: path.join(this._basePath, 'audio', 'mario_pipe.wav'), audioLength: 800 };
 
 
 
@@ -331,7 +335,7 @@ export class EditorListener {
         switch (pressedKey) {
             // SPACE_BAR KEY
             case ' ':
-                if(soundPlaying === true) { return; }
+                if (soundPlaying === true) { return; }
                 soundPlaying = true;
                 this.player.play(this._marioJumpAudio.path);
                 setTimeout(() => {
@@ -345,7 +349,7 @@ export class EditorListener {
     }, 0, { leading: true });
 
     _createFileCallback = debounce(() => {
-        if(soundPlaying === true) { return; }
+        if (soundPlaying === true) { return; }
         soundPlaying = true;
         this.player.play(this._1UpAudio.path);
         setTimeout(() => {
@@ -354,7 +358,7 @@ export class EditorListener {
     }, 0, { leading: true });
 
     _deleteFileCallback = debounce(() => {
-        if(soundPlaying === true) { return; }
+        if (soundPlaying === true) { return; }
         soundPlaying = true;
         this.player.play(this._deathAudio.path);
         setTimeout(() => {
@@ -363,7 +367,7 @@ export class EditorListener {
     }, 0, { leading: true });
 
     _saveFileCallback = debounce(() => {
-        if(soundPlaying === true) { return; }
+        if (soundPlaying === true) { return; }
         soundPlaying = true;
         this.player.play(this._levelCompleteAudio.path);
         setTimeout(() => {
@@ -372,7 +376,7 @@ export class EditorListener {
     }, 0, { leading: true });
 
     _openProjectCallback = debounce(() => {
-        if(soundPlaying === true) { return; }
+        if (soundPlaying === true) { return; }
         soundPlaying = true;
         vscode.window.showInformationMessage("You got this!");
         this.player.play(this._hereWeGoAudio.path);
@@ -382,16 +386,16 @@ export class EditorListener {
     }, 0, { leading: true });
 
     _switchFileCallback = debounce(() => {
-        if(soundPlaying === true) { return; }
+        if (soundPlaying === true) { return; }
         soundPlaying = true;
         this.player.play(this._marioPipeAudio.path);
         setTimeout(() => {
             soundPlaying = false;
         }, this._marioPipeAudio.audioLength);
     }, 130);
-    
+
     _splitScreenCallback = debounce(() => {
-        if(soundPlaying === true) { return; }
+        if (soundPlaying === true) { return; }
         soundPlaying = true;
         this.player.play(this._starPowerAudio.path);
         setTimeout(() => {
