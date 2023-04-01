@@ -5,8 +5,7 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import player, { PlayerConfig } from './player';
 import debounce = require('lodash.debounce');
-import { keys, toInteger } from 'lodash';
-import { ALL } from 'dns';
+import { toInteger } from 'lodash';
 
 let listener: EditorListener;
 let isActive: boolean;
